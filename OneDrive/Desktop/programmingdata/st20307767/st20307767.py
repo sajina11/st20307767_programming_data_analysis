@@ -13,6 +13,29 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.impute import SimpleImputer
 
 # Function to load and preprocess data
+def data_handling(data_handling):
+    data_handling_list = []
+    for data_handling_file in data_handling:
+        df = pd.read_csv(data_handling_file)
+        data_handling_list.append(df)
+
+    # Combine all datasets into one DataFrame
+    data_handling_part_system = pd.concat(data_handling_list, ignore_index=True)
+
+    # Handle missing values
+    data_handling_part_system.fillna(method='ffill', inplace=True)  # Forward fill missing values
+
+    # Remove duplicate entries
+    data_handling_part_system.drop_duplicates(inplace=True)
+
+    # Feature engineering (e.g., create 'Month' from 'year')
+    if 'year' in data_handling_part_system.columns:
+        data_handling_part_system['year'] = pd.to_datetime(data_handling_part_system['year'], errors='coerce')
+        data_handling_part_system['Month'] = data_handling_part_system['year'].dt.month
+        data_handling_part_system.dropna(subset=['year'], inplace=True)
+
+    return data_handling_part_system
+
 # Streamlit App
 def main():
     st.title(" Air Quality Data Analysis system Using streamlit")
