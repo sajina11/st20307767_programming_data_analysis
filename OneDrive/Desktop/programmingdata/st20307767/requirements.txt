@@ -1,7 +1,7 @@
-pandas
 streamlit
+pandas
 seaborn
 matplotlib
-folium
 scikit-learn
+folium
 streamlit-folium
